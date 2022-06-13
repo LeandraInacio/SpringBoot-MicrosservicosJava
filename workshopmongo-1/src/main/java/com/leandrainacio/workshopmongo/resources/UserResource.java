@@ -1,27 +1,28 @@
 package com.leandrainacio.workshopmongo.resources;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.List;import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.leandrainacio.workshopmongo.domain.User;
+import com.leandrainacio.workshopmongo.dto.UserDTO;
+import com.leandrainacio.workshopmongo.services.UserService;
 
 @RestController
 @RequestMapping(value="/users")
 public class UserResource {
-
+	
+	@Autowired
+	private UserService service;
+	
 	@GetMapping
-	public List<User> findAll(){
-		User usuario1 = new User("1", "Maria", "maria@email.com");
-		User usuario2 = new User("2", "João", "joao@email.com");
-		
-		List<User> lista = new ArrayList<>();
-		lista.addAll(Arrays.asList(usuario1, usuario2));
-		
-		return lista;		
+	public List<UserDTO> findAll(){
+		List<User> lista = service.findAll();
+		List<UserDTO>  listaDTO = lista.stream().map(x -> new UserDTO(x)).collect(Collectors.toList());
+		return listaDTO;		
 	}
 }
