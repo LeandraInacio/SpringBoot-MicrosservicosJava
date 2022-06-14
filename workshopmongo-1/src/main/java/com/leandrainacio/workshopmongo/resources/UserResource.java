@@ -1,8 +1,8 @@
 package com.leandrainacio.workshopmongo.resources;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.leandrainacio.workshopmongo.domain.Post;
 import com.leandrainacio.workshopmongo.domain.User;
 import com.leandrainacio.workshopmongo.dto.UserDTO;
 import com.leandrainacio.workshopmongo.services.UserService;
@@ -34,5 +35,14 @@ public class UserResource {
 		Optional<User> objeto = service.findById(id);
 		//UserDTO userDTO = new UserDTO(objeto);
 		return objeto;		
+	}
+	
+	@GetMapping(value = "/{id}/posts")
+	public List<Post> findByPosts(@PathVariable String id){
+		Optional<User> objeto = service.findById(id);
+		User objetoUser = objeto.get();
+		List<Post> post = new ArrayList<>();
+		post.addAll(objetoUser.getPost());
+		return 	post;
 	}
 }
